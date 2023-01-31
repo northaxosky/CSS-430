@@ -1,0 +1,24 @@
+SPECIAL NOTE:
+I ran the program with the following bash script:
+rm -f sudoku
+gcc -Wall -Wextra sudoku.c -o sudoku -pthread -lm
+./sudoku puzzle9-valid.txt
+./sudoku puzzle2-valid.txt
+./sudoku puzzle2-invalid.txt
+./sudoku puzzle2-fill-valid.txt
+./sudoku puzzle9-solve.txt
+---------------------------------------------------------------------
+1. Can verify wether it was valid or not. 10/10
+- The program is able to verify wether a n x n table is valid or not.
+2. Starts/joins multiple threads to speedup operation. 5/5
+- The program does start/join multiple threads in checkPuzzle().
+3. For n x n complete puzzle, can verify wether it is valid or not. 5/5
+- The program is able to verify if a complete puzzle is valid.
+4. The number of threads is proportional to n. 5/5
+- The number of threads is 3
+5. BONUS: Can complete puzzles. 2/2
+- Completed the non complete puzzle that is 4 x 4
+6. BONUS Can complete difficult puzzles. 3/3
+- Couldn't find puzzle-hard.txt but made a 9 x 9 puzzle and it could complete it.
+TOTAL: I think the total is wrong because the normal total adds up to 25 and the 
+bonus makes it 30 so 30/25.
