@@ -76,9 +76,6 @@ void schedule() {
     struct node *curr = head;
     while (curr)    {
         //update values to be zero
-        process[p].turnaround = 0;
-        process[p].response = 0;
-        process[p].wait = 0;
         run(curr->task, curr->task->burst);
         time += curr->task->burst;
         process[p].turnaround = time;
