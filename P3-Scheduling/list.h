@@ -9,6 +9,12 @@ struct node {
     struct node *next;
 };
 
+struct values {
+    int turnaround;
+    int wait;
+    int response;
+};
+
 // insert and delete operations.
 void insert(struct node **head, Task *task);
 void delete(struct node **head, Task *task);
