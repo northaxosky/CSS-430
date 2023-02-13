@@ -13,6 +13,7 @@ struct values {
     int turnaround;
     int wait;
     int response;
+    int burst;
 };
 
 // insert and delete operations.

@@ -1,0 +1,159 @@
+FCFS:
+Running task = [T1] [4] [20] for 20 units.
+Time is now: 20
+Running task = [T2] [3] [25] for 25 units.
+Time is now: 45
+Running task = [T3] [3] [25] for 25 units.
+Time is now: 70
+Running task = [T4] [5] [15] for 15 units.
+Time is now: 85
+Running task = [T5] [5] [20] for 20 units.
+Time is now: 105
+Running task = [T6] [1] [10] for 10 units.
+Time is now: 115
+Running task = [T7] [3] [30] for 30 units.
+Time is now: 145
+Running task = [T8] [10] [25] for 25 units.
+Time is now: 170
+CPU Utilization: 96.05%
+...| T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 |
+TAT| 20 | 45 | 70 | 85 | 105 | 115 | 145 | 170 |
+WT | 0 | 20 | 45 | 70 | 85 | 105 | 115 | 145 |
+RT | 0 | 20 | 45 | 70 | 85 | 105 | 115 | 145 |
+==========================================================
+SJB:
+Running task = [T6] [1] [10] for 10 units.
+Time is now: 10
+Running task = [T4] [5] [15] for 15 units.
+Time is now: 25
+Running task = [T1] [4] [20] for 20 units.
+Time is now: 45
+Running task = [T5] [5] [20] for 20 units.
+Time is now: 65
+Running task = [T2] [3] [25] for 25 units.
+Time is now: 90
+Running task = [T3] [3] [25] for 25 units.
+Time is now: 115
+Running task = [T8] [10] [25] for 25 units.
+Time is now: 140
+Running task = [T7] [3] [30] for 30 units.
+Time is now: 170
+CPU Utilization: 96.05%
+...| T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 |
+TAT| 45 | 90 | 115 | 25 | 65 | 10 | 170 | 140 |
+WT | 25 | 65 | 90 | 10 | 45 | 0 | 140 | 115 |
+RT | 25 | 65 | 90 | 10 | 45 | 0 | 140 | 115 |
+==========================================================
+Priority:
+Running task = [T8] [10] [25] for 25 units.
+Time is now: 25
+Running task = [T4] [5] [15] for 15 units.
+Time is now: 40
+Running task = [T5] [5] [20] for 20 units.
+Time is now: 60
+Running task = [T1] [4] [20] for 20 units.
+Time is now: 80
+Running task = [T2] [3] [25] for 25 units.
+Time is now: 105
+Running task = [T3] [3] [25] for 25 units.
+Time is now: 130
+Running task = [T7] [3] [30] for 30 units.
+Time is now: 160
+Running task = [T6] [1] [10] for 10 units.
+Time is now: 170
+CPU Utilization: 96.05%
+...| T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 |
+TAT| 80 | 105 | 130 | 40 | 60 | 170 | 160 | 25 |
+WT | 60 | 80 | 105 | 25 | 40 | 160 | 130 | 0 |
+RT | 60 | 80 | 105 | 25 | 40 | 160 | 130 | 0 |
+==========================================================
+RR:
+Running task = [T1] [4] [20] for 10 units.
+Time is now: 10
+Running task = [T2] [3] [25] for 10 units.
+Time is now: 20
+Running task = [T3] [3] [25] for 10 units.
+Time is now: 30
+Running task = [T4] [5] [15] for 10 units.
+Time is now: 40
+Running task = [T5] [5] [20] for 10 units.
+Time is now: 50
+Running task = [T6] [1] [10] for 10 units.
+Time is now: 60
+Running task = [T7] [3] [30] for 10 units.
+Time is now: 70
+Running task = [T8] [10] [25] for 10 units.
+Time is now: 80
+Running task = [T1] [4] [10] for 10 units.
+Time is now: 90
+Running task = [T2] [3] [15] for 10 units.
+Time is now: 100
+Running task = [T3] [3] [15] for 10 units.
+Time is now: 110
+Running task = [T4] [5] [5] for 5 units.
+Time is now: 115
+Running task = [T5] [5] [10] for 10 units.
+Time is now: 125
+Running task = [T7] [3] [20] for 10 units.
+Time is now: 135
+Running task = [T8] [10] [15] for 10 units.
+Time is now: 145
+Running task = [T2] [3] [5] for 5 units.
+Time is now: 150
+Running task = [T3] [3] [5] for 5 units.
+Time is now: 155
+Running task = [T7] [3] [10] for 10 units.
+Time is now: 165
+Running task = [T8] [10] [5] for 5 units.
+Time is now: 170
+CPU Utilization: 89.95%
+...| T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 |
+TAT| 90 | 150 | 155 | 115 | 125 | 60 | 165 | 170 |
+WT | 70 | 125 | 130 | 100 | 105 | 50 | 135 | 170 |
+RT | 0 | 10 | 20 | 30 | 40 | 50 | 60 | 0 |
+==========================================================
+RR w/ priority:
+Running task = [T8] [10] [25] for 10 units.
+Time is now: 10
+Running task = [T4] [5] [15] for 10 units.
+Time is now: 20
+Running task = [T5] [5] [20] for 10 units.
+Time is now: 30
+Running task = [T1] [4] [20] for 10 units.
+Time is now: 40
+Running task = [T2] [3] [25] for 10 units.
+Time is now: 50
+Running task = [T3] [3] [25] for 10 units.
+Time is now: 60
+Running task = [T7] [3] [30] for 10 units.
+Time is now: 70
+Running task = [T6] [1] [10] for 10 units.
+Time is now: 80
+Running task = [T8] [10] [15] for 10 units.
+Time is now: 90
+Running task = [T4] [5] [5] for 5 units.
+Time is now: 95
+Running task = [T5] [5] [10] for 10 units.
+Time is now: 105
+Running task = [T1] [4] [10] for 10 units.
+Time is now: 115
+Running task = [T2] [3] [15] for 10 units.
+Time is now: 125
+Running task = [T3] [3] [15] for 10 units.
+Time is now: 135
+Running task = [T7] [3] [20] for 10 units.
+Time is now: 145
+Running task = [T8] [10] [5] for 5 units.
+Time is now: 150
+Running task = [T2] [3] [5] for 5 units.
+Time is now: 155
+Running task = [T3] [3] [5] for 5 units.
+Time is now: 160
+Running task = [T7] [3] [10] for 10 units.
+Time is now: 170
+CPU Utilization: 89.95%
+...| T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 |
+TAT| 115 | 155 | 160 | 95 | 105 | 80 | 170 | 150 |
+WT | 95 | 130 | 135 | 80 | 85 | 70 | 140 | 150 |
+RT | 30 | 40 | 50 | 10 | 20 | 70 | 60 | 0 |
+

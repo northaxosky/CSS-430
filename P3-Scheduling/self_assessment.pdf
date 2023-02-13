@@ -1,0 +1,18 @@
+ATTENTION: Slight changes made to driver, scheduler and list were made to help solve
+the bonus questions.
+FCFS: 5/5
+- The algorithmn does FCFS scheduling
+SJF: 5/5
+- The algorithm schedules by the shortest job
+Priority: 5/5
+- The algorithm schedules the tasks by priority and if there are multiple tasks with
+the same priority it schedules them alphabetically
+Round Robin: 5/5
+- The algorithm does FCFS round robin with time quantum defined in CPU.h
+Round Robin Priority: 5/5
+- The algorithm does priority scheduling with round robbing using the time quantum
+Bonus: 4/5 - 5/5
+- Believe I got both the bonus right but am having some issues setting the last value 
+for the last process both round robin algo(for example Respone time for T8). I looked around and it seemed
+to be an issue with memory and unfortunately I couldn't figure it out in the time i had left.
+- Other than that I believe the CPU utilization and the table displays the correct info.
