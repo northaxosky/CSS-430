@@ -17,5 +17,6 @@ struct values {
 
 // insert and delete operations.
 void insert(struct node **head, Task *task);
+void insertEnd(struct node **tail, Task *task);
 void delete(struct node **head, Task *task);
 void traverse(struct node *head);

@@ -57,7 +57,7 @@ void schedule(){
     // CPU utilization calculations
     float CPU = (float)(time/(time + (count - 1)));
     CPU *= 100;
-    printf("CPU Utilization: %f%%\n", CPU);
+    printf("CPU Utilization: %0.2f%%\n", CPU);
 
     // Time per process calculations
     printf("...|");

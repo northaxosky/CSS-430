@@ -45,14 +45,7 @@ void add(char *name, int priority, int burst) {
 
     //if the priority is the same, then compare the burst time
     if (curr->next && curr->next->task->priority == priority) {
-        while (curr->next && curr->next->task->burst > burst) {
-            curr = curr->next;
-        }
-    }
-
-    //if burst time is the same, then compare the TID
-    if (curr->next && curr->next->task->burst == burst) {
-        while (curr->next && curr->next->task->tid > priority) {
+        while (curr->next && curr->next->task->name < name && curr->next->task->priority == priority) {
             curr = curr->next;
         }
     }
@@ -70,19 +63,19 @@ void add(char *name, int priority, int burst) {
 // Schedule algorithm
 void schedule() {
     struct values process[count];
-    double time;
-    int p = 0;
+    double time = 0;
 
     struct node *curr = head;
-    while (curr) {
+    while (curr)    {
         run(curr->task, curr->task->burst);
-        time = time + curr->task->burst;
-        process[p].turnaround = time;
-        process[p].wait = time - curr->task->burst;
-        process[p].response = time - curr->task->burst;
-        p++;
+        time += curr->task->burst;
         curr = curr->next;
 
         printf("Time is now: %0.0lf\n", time);
     }
+
+    // CPU utilizations calculations
+    float CPU = (float)(time/(time + (count -1)));
+    CPU *= 100;
+    printf("CPU Utilization: %0.2f%%\n", CPU);
 }

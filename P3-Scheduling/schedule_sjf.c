@@ -86,4 +86,10 @@ void schedule() {
 
         printf("Time is now: %0.0lf\n", time);
     }
+
+    // Calculate CPU utilization
+    float CPU = (float)(time/(time + (count -1)));
+    CPU *= 100;
+    pritnf("CPU Utilization: %0.2f%%\n", CPU);
+
 }
