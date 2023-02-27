@@ -67,13 +67,8 @@ F  X
 
 E
 */
+#include "memory.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-
-#define MEMSIZE 80
 char memory[MEMSIZE];
 
 // main functions to take in input of R filename.txt, open up the file, and run the commands in the file
@@ -92,31 +87,45 @@ int main()  {
     if (command[0] == 'R')  {
         // Open up the file
         FILE *fp;
-        fp = fopen(command, "r");
+        // Get the file name
+        char *filename;
+        filename = strtok(command, " ");
+        filename = strtok(NULL, " ");
+        filename[strlen(filename) - 1] = '\0';
+
+        fp = fopen(filename, "r");
+
+        if (!fp) {
+            printf("Error opening file\n");
+        }
 
         // Run the commands in the file
-        char line[100];
+        char line[MAXLINE];
         while (fgets(line, sizeof(line), fp))  {
             // Run the commands in the file
-            printf("Allocator> %s\n", line);
+            printf("Allocator> %s", line);
             run(line);
-
         }
     }
+    else  {
+        printf("Invalid command");
+    }
+    printf("\n");
 }
 
 // function to take in input of A name size algo, and allocate the size of memory for the process, also do the other commands
 void run(char *line)  {
     // If command is A, then allocate the size of memory for the process
     if (line[0] == 'A')  {
-        // Get the name of the process
-        char name = line[2];
-
-        // Get the size of the memory
-        char size = line[4];
-
-        // Get the algorithm
-        char algo = line[6];
+        // tokenize the line to get the name, size, and algo
+        char *token;
+        token = strtok(line, " ");
+        token = strtok(NULL, " ");
+        char name = token[0];
+        token = strtok(NULL, " ");
+        int size = atoi(token);
+        token = strtok(NULL, " ");
+        char algo = token[0];
 
         // Allocate the size of memory for the process
         if (algo == 'F')  {
@@ -172,27 +181,89 @@ void run(char *line)  {
 // Function for First-Fit algorithm
 void firstFit(char name, int size)  {
 
+    // Go through for loop and find the first available space that fits the size
     for (int i = 0; i < MEMSIZE; i++)  {
         if (memory[i] == '.')  {
-            memory[i] = name;
+            // make sure the process can fit in the memory
+            int count = 0;
+            for (int j = i; j < MEMSIZE; j++)  {
+                if (memory[j] == '.')  {
+                    count++;
+                }
+                else  {
+                    break;
+                }
+            }
+            if (count >= size)  {
+                // Allocate the size of memory for the process
+                for (int k = i; k < i + size; k++)  {
+                    memory[k] = name;
+                }
+                break;
+            }
         }
     }
 }
 
-void bestFit(char name, int size)  {
-    // Allocate the size of memory for the process
-    for (int i = 0; i < MEMSIZE; i++)  {
-        if (memory[i] == '.')  {
-            memory[i] = name;
+// Function for Best-Fit algorithm, the best fit is the smallest hole in memory that fits the process
+void bestFit(char name, int size)   {
+    int r = 0;
+    int l = 0;
+    int bestFit = 0;
+    int bestFitIndex = 0;
+    while (r < MEMSIZE) {
+        if (memory[r] == '.') {
+            while (memory[r] == '.') {
+                r++;
+            }
+            if (r - l >= size && (bestFit == 0 || r - l < bestFit)) {
+                bestFit = r - l;
+                bestFitIndex = l;
+            }
+            l = r;
         }
+        else {
+            r++;
+            l++;
+        }
+    }
+    // Allocate the size of memory for the process
+    for (int k = bestFitIndex; k < bestFitIndex + size; k++)  {
+        memory[k] = name;
     }
 }
 
 void worstFit(char name, int size)  {
-    // Allocate the size of memory for the process
+    // Go through the memory and find the worst fit. The worst fit is the largest hole that fits the process
+    int worstFit = 0;
+    int worstFitIndex = 0;
     for (int i = 0; i < MEMSIZE; i++)  {
         if (memory[i] == '.')  {
-            memory[i] = name;
+            // make sure the process can fit in the memory
+            int count = 0;
+            for (int j = i; j < MEMSIZE; j++)  {
+                if (memory[j] == '.')  {
+                    count++;
+                }
+                else  {
+                    break;
+                }
+            }
+            if (count >= size)  {
+                // Allocate the size of memory for the process
+                if (worstFit == 0)  {
+                    worstFit = count;
+                    worstFitIndex = i;
+                }
+                else if (count > worstFit)  {
+                    worstFit = count;
+                    worstFitIndex = i;
+                }
+            }
         }
+    }
+    // Allocate the size of memory for the process
+    for (int k = worstFitIndex; k < worstFitIndex + size; k++)  {
+        memory[k] = name;
     }
 }

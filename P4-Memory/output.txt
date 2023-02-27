@@ -1,0 +1,21 @@
+gcc -Wall memory.c -o mem
+./mem
+Allocator> R script.txt
+Allocator> A A 10 F
+Allocator> A X 10 F
+Allocator> A B 10 F
+Allocator> A X 20 F
+Allocator> A C 5 F
+Allocator> A X 15 F
+Allocator> A D 5 F
+Allocator> F X
+Allocator> S
+AAAAAAAAAA..........BBBBBBBBBB....................CCCCC...............DDDDD.....
+Allocator> A E 25 F
+Allocator> A F 15 F
+Allocator> A G 3 B
+Allocator> A H 1 W
+Allocator> S
+AAAAAAAAAA..........BBBBBBBBBBFFFFFFFFFFFFFFFGGG..CCCCCH..............DDDDD.....
+Allocator> C
+Allocator> E
