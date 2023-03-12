@@ -79,17 +79,83 @@ i32 fsOpen(str fname) {
 
 // ============================================================================
 // Read 'numb' bytes of data from the cursor in the file currently fsOpen'd on
-// File Descriptor 'fd' into 'buf'.  On success, return actual number of bytes
-// read (may be less than 'numb' if we hit EOF).  On failure, abort
+// File Descriptor 'fd'. Place the bytes into the memory buffer buf.  On success, 
+// return actual number of bytes read (may be less than 'numb' if we hit EOF).  
+// On failure, abort
 // ============================================================================
 i32 fsRead(i32 fd, i32 numb, void* buf) {
+  //get the inum and cursor
+  i32 inum = bfsFdToInum(fd);
+  i32 ofte = bfsFindOFTE(inum);
+  i32 curs = g_oft[ofte].curs;
 
-  // ++++++++++++++++++++++++
-  // Insert your code here
-  // ++++++++++++++++++++++++
+  //get the size of the file & the number of blocks
+  i32 size = bfsGetSize(inum);
+  i32 num_blocks = (size + BYTESPERBLOCK - 1) / BYTESPERBLOCK;
 
-  FATAL(ENYI);                                  // Not Yet Implemented!
-  return 0;
+  //if the cursor is at or past EOF, return 0
+  if (curs >= size) return 0;
+  //if the cursor + numb is past EOF, set numb to the number of bytes left
+  if (curs + numb > size) numb = size - curs;
+
+  // get the FBN of the block that the cursor is in
+  i32 fbn = curs / BYTESPERBLOCK;
+
+  // get the offset of the cursor in the block,
+  i32 offset = curs % BYTESPERBLOCK;
+
+  i32 bytes_read = 0;
+  if (offset != 0)  {
+    // create a temporary buffer, and read the block into it
+    i8 temp[BYTESPERBLOCK];
+    i32 ret = bfsRead(inum, fbn, temp);
+    if (ret != 0) return 0;
+    // if numb is less than the number of bytes left in the block, copy the bytes
+    // into the buffer and return
+    if (numb < BYTESPERBLOCK - offset) {
+      memcpy(buf, temp + offset, numb);
+      g_oft[ofte].curs += numb;
+      return numb;
+    }
+    // copy the bytes after the offset into the buffer
+    memcpy(buf, temp + offset, BYTESPERBLOCK - offset);
+    //update cursor, bytes read and fbn
+
+  }
+
+  // create a loop to read blocks
+  while (bytes_read < numb) {
+    // if we are at the end of the file, break
+    if (fbn >= num_blocks) break;
+    // if less than a block is left, break
+    if (numb - bytes_read < BYTESPERBLOCK) break;
+    // create a temporary buffer, and read the block into it
+    i8 temp[BYTESPERBLOCK];
+    i32 ret = bfsRead(inum, fbn, temp);
+    if (ret != 0) return 0;
+    // copy the bytes into the buffer
+    memcpy(buf + bytes_read, temp, BYTESPERBLOCK);
+    //update cursor, bytes read and fbn
+    g_oft[ofte].curs += BYTESPERBLOCK;
+    bytes_read += BYTESPERBLOCK;
+    fbn++;
+  }
+
+
+  // if there are less than a block left, read the last block
+  if ((numb - bytes_read < BYTESPERBLOCK) && bytes_read < numb) {
+    // create a temporary buffer, and read the block into it
+    i8 temp[BYTESPERBLOCK];
+    i32 ret = bfsRead(inum, fbn, temp);
+    if (ret != 0) return 0;
+    // copy the bytes into the buffer
+    memcpy(buf + bytes_read, temp, numb - bytes_read);
+    //update cursor, bytes read and fbn
+    g_oft[ofte].curs += numb - bytes_read;
+    bytes_read += numb - bytes_read;
+  }
+
+  return bytes_read;
 }
 
 
@@ -152,16 +218,56 @@ i32 fsSize(i32 fd) {
 
 
 // ============================================================================
-// Write 'numb' bytes of data from 'buf' into the file currently fsOpen'd on
-// filedescriptor 'fd'.  The write starts at the current file offset for the
-// destination file.  On success, return 0.  On failure, abort
+// Write 'numb' bytes of data from the memory buffer 'buf' into the file currently 
+//fsOpen'd on filedescriptor 'fd'.  The write starts at the current file offset 
+//for the destination file. Note that a write to any bytes beyond the current length
+// of the file will automatically extend the file.  On success, return 0.  On failure,
+// abort
 // ============================================================================
 i32 fsWrite(i32 fd, i32 numb, void* buf) {
 
-  // ++++++++++++++++++++++++
-  // Insert your code here
-  // ++++++++++++++++++++++++
+  // find inum, size and cursor
+  i32 inum = bfsFdToInum(fd);
+  i32 ofte = bfsFindOFTE(inum);
+  i32 cursor = g_oft[ofte].curs;
+  i32 size = bfsGetSize(inum);
 
-  FATAL(ENYI);                                  // Not Yet Implemented!
+  // find fbn
+  i32 fbn = cursor / BYTESPERBLOCK;
+  i32 last = (cursor + numb) / BYTESPERBLOCK;
+  // check if last block is EOF
+  if (cursor + numb > size) {
+    bfsExtend(inum, (cursor + numb) / BYTESPERBLOCK);
+    bfsSetSize(inum, cursor + numb);
+  }
+  // create temp buffer
+  i8 temp[BYTESPERBLOCK];
+  i32 bytes_written = 0;
+  i32 curr = cursor;
+  
+  while (fbn <= last)  {
+    // get dbn from fbn
+    i32 dbn = bfsFbnToDbn(inum, fbn);
+    // read block into temp buffer
+    i32 ret = bfsRead(inum, fbn, temp);
+    if (ret != 0) return 0;
+    // calculate start and end of the buffer
+    i32 start = curr - (fbn * BYTESPERBLOCK);
+    i32 end;
+    if (curr + (numb - (curr - cursor)) > ((fbn + 1) * BYTESPERBLOCK))
+      end = BYTESPERBLOCK;
+    else
+      end = (numb - (curr - cursor)) + start;
+    // copy bytes into temp buffer
+    memcpy(temp + start, buf + (curr - cursor), end - start);
+    // write temp buffer to disk
+    ret = bioWrite(dbn, temp);
+    // update cursor, bytes written and fbn
+    g_oft[ofte].curs += end - start;
+    bytes_written += end - start;
+    fbn++;
+    curr += end - start;
+  }
+                                
   return 0;
 }
